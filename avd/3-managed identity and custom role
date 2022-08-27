@@ -16,7 +16,7 @@ $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imag
 New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName
 
 # Create and assign custom role
-$aibRoleImageCreationUrl="https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/solutions/12_Creating_AIB_Security_Roles/aibRoleImageCreation.json"
+$aibRoleImageCreationUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/aibRoleImageCreation.json"
 $aibRoleImageCreationPath = "aibRoleImageCreation.json"
 
 # download config
