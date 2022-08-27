@@ -1,13 +1,14 @@
+# You only have to do the prerequisites one time for your Azure account
 # Connect to your Azure account
 Connect-AzAccount
 
 # Register for Azure Image Builder Feature
 Register-AzProviderFeature -FeatureName VirtualMachineTemplatePreview -ProviderNamespace Microsoft.VirtualMachineImages
 
-# wait until RegistrationState is set to 'Registered'
+# Wait until RegistrationState is set to 'Registered'
 Get-AzProviderFeature -FeatureName VirtualMachineTemplatePreview -ProviderNamespace Microsoft.VirtualMachineImages
 
-# check you are registered for the providers, ensure RegistrationState is set to 'Registered'.
+# Check you are registered for the providers, ensure RegistrationState is set to 'Registered'.
 Get-AzResourceProvider -ProviderNamespace Microsoft.VirtualMachineImages
 Get-AzResourceProvider -ProviderNamespace Microsoft.Storage
 Get-AzResourceProvider -ProviderNamespace Microsoft.Compute
