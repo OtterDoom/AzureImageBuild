@@ -1,5 +1,11 @@
 # Create a managed identity and custom role to securely perform the automated image build tasks
 
+# Get existing Azure account context
+$currentAzContext = Get-AzContext
+
+# Get your current subscription ID
+$subscriptionID = $currentAzContext.Subscription.Id
+
 # Create custom role and and managed identity name
 $timeInt=$(get-date -UFormat "%s")
 $imageRoleDefName="Image Builder Contributor"+$timeInt
@@ -9,6 +15,7 @@ $identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $image
 $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
 New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName
 
+# Create and assign custom role
 $aibRoleImageCreationUrl="https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/solutions/12_Creating_AIB_Security_Roles/aibRoleImageCreation.json"
 $aibRoleImageCreationPath = "aibRoleImageCreation.json"
 
@@ -23,8 +30,8 @@ Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPa
 New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json
 
 # grant role definition to image builder service principal
-New-AzRoleAssignment -ObjectId $idenityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
+New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
 
 ### NOTE: If you see this error: 'New-AzRoleDefinition: Role definition limit exceeded. No more role definitions can be created.' See this article to resolve:
-https://docs.microsoft.com/en-us/azure/role-based-access-control/troubleshooting
+# https://docs.microsoft.com/en-us/azure/role-based-access-control/troubleshooting
 
