@@ -1,0 +1,32 @@
+# Building our variables
+# get existing Azure account context
+$currentAzContext = Get-AzContext
+
+# what you want to call your destination image resource group
+$imageResourceGroup = "AIB"
+
+# the Azure region to deploy to
+$location = "eastus"
+
+# your subscription, this will get your current subscription
+$subscriptionID = $currentAzContext.Subscription.Id
+
+# what you want to name your image template
+$imageTemplateName = "avd10ImageTemplate01"
+
+# distribution properties object name (runOutput), i.e. this gives you the properties of the managed image on completion
+$runOutputName = "sigOutput"
+
+# what you want to call your image gallery
+$sigGalleryName = "AIBGallery"
+
+# what you want to call your image definition
+$imageDefName = "win10avd"
+
+$identityname = "ImageBuilder"
+$identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id
+$identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
+
+
+$templateUrl="https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/solutions/14_Building_Images_WVD/armTemplateWVD.json"
+$templateFilePath = "armTemplateWVD.json"
