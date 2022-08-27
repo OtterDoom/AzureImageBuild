@@ -1,4 +1,9 @@
-# You only have to do the prerequisites one time for your Azure account
+# You can skip ahead to 2-variables if you are doing a redeploy to the same Azure tenant.
+
+# Make sure you have these PowerShell modules
+Install-Module -Name Az
+Install-Module -Name Az.ImageBuilder
+
 # Connect to your Azure account
 Connect-AzAccount
 
@@ -8,16 +13,16 @@ Register-AzProviderFeature -FeatureName VirtualMachineTemplatePreview -ProviderN
 # Wait until RegistrationState is set to 'Registered'
 Get-AzProviderFeature -FeatureName VirtualMachineTemplatePreview -ProviderNamespace Microsoft.VirtualMachineImages
 
+# Register resource providers in Azure. These are commonly already registered.
+Register-AzResourceProvider -ProviderNamespace Microsoft.VirtualMachineImages
+Register-AzResourceProvider -ProviderNamespace Microsoft.Storage
+Register-AzResourceProvider -ProviderNamespace Microsoft.Compute
+Register-AzResourceProvider -ProviderNamespace Microsoft.KeyVault
+
 # Check you are registered for the providers, ensure RegistrationState is set to 'Registered'.
 Get-AzResourceProvider -ProviderNamespace Microsoft.VirtualMachineImages
 Get-AzResourceProvider -ProviderNamespace Microsoft.Storage
 Get-AzResourceProvider -ProviderNamespace Microsoft.Compute
 Get-AzResourceProvider -ProviderNamespace Microsoft.KeyVault
-
-# If they do not say registered, run the code below.
-Register-AzResourceProvider -ProviderNamespace Microsoft.VirtualMachineImages
-Register-AzResourceProvider -ProviderNamespace Microsoft.Storage
-Register-AzResourceProvider -ProviderNamespace Microsoft.Compute
-Register-AzResourceProvider -ProviderNamespace Microsoft.KeyVault
 
 #End of PreReqs

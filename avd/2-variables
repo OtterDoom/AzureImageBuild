@@ -1,32 +1,31 @@
-# Building our variables
-# get existing Azure account context
-$currentAzContext = Get-AzContext
+# Make sure to Connect-AzAccount if you are doing a redeploy and skipped 1-prerequisites
 
-# what you want to call your destination image resource group
-$imageResourceGroup = "AIB"
+# Building our variables and base environment.
 
-# the Azure region to deploy to
+# The Azure region to deploy to. Region names: Get-AzLocation | Select-Object Location | Sort-Object Location
 $location = "eastus"
+
+# Get existing Azure account context
+$currentAzContext = Get-AzContext
 
 # your subscription, this will get your current subscription
 $subscriptionID = $currentAzContext.Subscription.Id
 
-# what you want to name your image template
+# whatever you want to name your destination image resource group and then create it.
+$imageResourceGroup = "AIB"
+New-AzResourceGroup -Name $imageResourceGroup -Location $location
+
+# whatever you want to name your image template
 $imageTemplateName = "avd10ImageTemplate01"
 
 # distribution properties object name (runOutput), i.e. this gives you the properties of the managed image on completion
 $runOutputName = "sigOutput"
 
-# what you want to call your image gallery
+# whatever you want to name your image gallery
 $sigGalleryName = "AIBGallery"
 
-# what you want to call your image definition
+# whatever you want to name your image definition
 $imageDefName = "win10avd"
-
-$identityname = "ImageBuilder"
-$identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id
-$identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
-
 
 $templateUrl="https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/solutions/14_Building_Images_WVD/armTemplateWVD.json"
 $templateFilePath = "armTemplateWVD.json"
