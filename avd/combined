@@ -1,5 +1,4 @@
 # Make sure to Connect-AzAccount if you are doing a redeploy and skipped 1-prerequisites
-
 # Building our variables and base environment.
 
 # The Azure region to deploy to. Region names: Get-AzLocation | Select-Object Location | Sort-Object Location
@@ -25,9 +24,7 @@ $imageDefName = "win10avd"
 $templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/armtemplateAVD.json"
 $templateFilePath = "armTemplateWVD.json"
 
-###########
 # Create a managed identity and custom role to securely perform the automated image build tasks
-###########
 
 # Get existing Azure account context
 $currentAzContext = Get-AzContext
@@ -64,9 +61,7 @@ New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $ima
 ### NOTE: If you see this error: 'New-AzRoleDefinition: Role definition limit exceeded. No more role definitions can be created.' See this article to resolve:
 # https://docs.microsoft.com/en-us/azure/role-based-access-control/troubleshooting
 
-###########
 # Create a shared image gallery and a image definition container
-###########
 
 # create gallery
 New-AzGallery -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup  -Location $location
@@ -74,9 +69,7 @@ New-AzGallery -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGrou
 # create gallery definition
 New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'Windows' -Sku '10wvd'
 
-###########
 # Configure the ARM template
-###########
 
 Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
 
