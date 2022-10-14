@@ -21,5 +21,6 @@ $sigGalleryName = "AIBGallery"
 # whatever you want to name your image definition
 $imageDefName = "win10avd"
 
-$templateUrl="https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/solutions/14_Building_Images_WVD/armTemplateWVD.json"
+# used to configure the ARM template
+$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/armtemplateAVD.json"
 $templateFilePath = "armTemplateWVD.json"

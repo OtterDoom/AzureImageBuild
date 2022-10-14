@@ -1,7 +1,4 @@
 
-$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/armtemplateAVD.json"
-$templateFilePath = "armTemplateWVD.json"
-
 Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
 
 ((Get-Content -path $templateFilePath -Raw) -replace '<subscriptionID>',$subscriptionID) | Set-Content -Path $templateFilePath

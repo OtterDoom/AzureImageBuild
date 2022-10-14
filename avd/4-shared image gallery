@@ -1,11 +1,5 @@
 # Create a shared image gallery and a image definition container
 
-# whatever you want to name your image gallery
-$sigGalleryName= "AIBgallery"
-
-# whatever you want to name your gallery image definition
-$imageDefName ="win10wvd"
-
 # create gallery
 New-AzGallery -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup  -Location $location
 
