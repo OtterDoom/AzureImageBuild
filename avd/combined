@@ -1,11 +1,10 @@
 # Make sure to Connect-AzAccount if you are doing a redeploy and skipped 1-prerequisites
 # Building our variables and base environment.
-
 # The Azure region to deploy to. Region names: Get-AzLocation | Select-Object Location | Sort-Object Location
 $location = "eastus"
 
 # whatever you want to name your destination image resource group and then create it.
-$imageResourceGroup = "AIB"
+$imageResourceGroup = "RG-AzureImageBuilder"
 New-AzResourceGroup -Name $imageResourceGroup -Location $location
 
 # whatever you want to name your image template
@@ -21,6 +20,9 @@ $sigGalleryName = "AIBGallery"
 $imageDefName = "win10avd"
 
 # used to configure the ARM template
+# If you want to use a different image type you can look up the current SKUs and alter the armTemplateWVD.json
+# Get-AzVMImageSku -Location $location -PublisherName MicrosoftWindowsDesktop -Offer windows-10
+
 $templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/armtemplateAVD.json"
 $templateFilePath = "armTemplateWVD.json"
 
@@ -32,16 +34,18 @@ $currentAzContext = Get-AzContext
 # Get your current subscription ID
 $subscriptionID = $currentAzContext.Subscription.Id
 
+# LOGICAL BREAK POINT HERE WHILE WAITING FOR STEPS TO COMPLETE
+
 # Create custom role and and managed identity name
 $timeInt=$(get-date -UFormat "%s")
 $imageRoleDefName="Image Builder Contributor"+$timeInt
 $identityName="ImageBuilder"+$timeInt
-
+New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -Location $location
+# LOGICAL BREAK POINT HERE WHILE WAITING FOR STEPS TO COMPLETE
 $identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id
 $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
-New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName
 
-# Create and assign custom role
+# Create and assign custom role to the managed identity
 $aibRoleImageCreationUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/aibRoleImageCreation.json"
 $aibRoleImageCreationPath = "aibRoleImageCreation.json"
 
@@ -54,13 +58,13 @@ Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPa
 
 # create role definition
 New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json
-
+# LOGICAL BREAK POINT HERE WHILE WAITING FOR STEPS TO COMPLETE
 # grant role definition to image builder service principal
 New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
 
 ### NOTE: If you see this error: 'New-AzRoleDefinition: Role definition limit exceeded. No more role definitions can be created.' See this article to resolve:
 # https://docs.microsoft.com/en-us/azure/role-based-access-control/troubleshooting
-
+# LOGICAL BREAK POINT HERE WHILE WAITING FOR STEPS TO COMPLETE
 # Create a shared image gallery and a image definition container
 
 # create gallery
@@ -70,7 +74,6 @@ New-AzGallery -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGrou
 New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'Windows' -Sku '10wvd'
 
 # Configure the ARM template
-
 Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
 
 ((Get-Content -path $templateFilePath -Raw) -replace '<subscriptionID>',$subscriptionID) | Set-Content -Path $templateFilePath
@@ -81,4 +84,40 @@ Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
 ((Get-Content -path $templateFilePath -Raw) -replace '<imageDefName>',$imageDefName) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<sharedImageGalName>',$sigGalleryName) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<region1>',$location) | Set-Content -Path $templateFilePath
-((Get-Content -path $templateFilePath -Raw) -replace '<imgBuilderId>',$idenityNameResourceId) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<imgBuilderId>',$identityNameResourceId) | Set-Content -Path $templateFilePath
+
+# submit the template to Azure Image Builder
+New-AzResourceGroupDeployment -ResourceGroupName $imageResourceGroup -TemplateFile $templateFilePath -api-version "2020-02-14" -imageTemplateName $imageTemplateName -svclocation $location
+
+# Optional - if you have any errors running the above, run:
+$getStatus=$(Get-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imageTemplateName)
+$getStatus.ProvisioningErrorCode 
+$getStatus.ProvisioningErrorMessage
+
+# LOGICAL BREAK POINT HERE WHILE WAITING FOR STEPS TO COMPLETE
+# build the image
+Start-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imageTemplateName -NoWait
+
+# to check the status of build process
+$getStatus=$(Get-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imageTemplateName)
+
+# this shows all the properties
+$getStatus | Format-List -Property *
+
+# these show the status the build
+$getStatus.LastRunStatusRunState 
+$getStatus.LastRunStatusMessage
+$getStatus.LastRunStatusRunSubState
+
+# # delete it all.
+# # Delete the resource group template first, do not just delete the entire resource group, otherwise the staging resource group (IT_) used by AIB will not be cleaned up.
+# Remove-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imagetemplatename
+
+# Remove-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
+
+# # remove definitions
+# Remove-AzRoleDefinition -Name "$imageRoleDefName" -Force -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
+
+# # delete identity
+# Remove-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName
+# Remove-AzResourceGroup $imageResourceGroup -Force
