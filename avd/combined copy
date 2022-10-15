@@ -38,8 +38,8 @@ New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $im
 # If you want to use a different image type you can look up the current SKUs and alter the armTemplateWVD.json
 # Get-AzVMImageSku -Location $location -PublisherName MicrosoftWindowsDesktop -Offer windows-11
 
-$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/armtemplateAVD copy.json"
-$templateFilePath = "armTemplateAVD.json"
+$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/armtemplateAVD%20copy.json"
+$templateFilePath = "armTemplateAVDcopy.json"
 
 # Configure the ARM template
 Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
