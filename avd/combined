@@ -1,11 +1,18 @@
 # Make sure to Connect-AzAccount AND set your context if you are doing a redeploy and skipped 1-prerequisites
 # Building our variables and base environment.
+
+# Get existing Azure account context
+$currentAzContext = Get-AzContext
+
+# Get your current subscription ID
+$subscriptionID = $currentAzContext.Subscription.Id
+
 # The Azure region to deploy to. Region names: Get-AzLocation | Select-Object Location | Sort-Object Location
 $location = "eastus"
 
 # whatever you want to name your destination image resource group and then create it.
-$imageResourceGroup = "RG-AzureImageBuilder"
-# New-AzResourceGroup -Name $imageResourceGroup -Location $location
+$imageResourceGroup = "RG-AIB1EastUS"
+New-AzResourceGroup -Name $imageResourceGroup -Location $location
 
 # whatever you want to name your image template
 $imageTemplateName = "avd10ImageTemplate01"
@@ -14,18 +21,10 @@ $imageTemplateName = "avd10ImageTemplate01"
 $runOutputName = "sigOutput"
 
 # whatever you want to name your image gallery
-$sigGalleryName = "AIBGallery"
+$sigGalleryName = "AIBGallery1EastUS"
 
 # whatever you want to name your image definition
-$imageDefName = "win10avd"
-
-# Create a managed identity and custom role to securely perform the automated image build tasks
-
-# Get existing Azure account context
-$currentAzContext = Get-AzContext
-
-# Get your current subscription ID
-$subscriptionID = $currentAzContext.Subscription.Id
+$imageDefName = "21h1-evd"
 
 # LOGICAL BREAK POINT HERE WHILE WAITING FOR STEPS TO COMPLETE
 
