@@ -5,7 +5,7 @@ $location = "eastus"
 
 # whatever you want to name your destination image resource group and then create it.
 $imageResourceGroup = "RG-AzureImageBuilder"
-New-AzResourceGroup -Name $imageResourceGroup -Location $location
+# New-AzResourceGroup -Name $imageResourceGroup -Location $location
 
 # whatever you want to name your image template
 $imageTemplateName = "avd10ImageTemplate02"
@@ -31,7 +31,7 @@ $subscriptionID = $currentAzContext.Subscription.Id
 
 
 # create gallery definition
-New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'Windows' -Sku '10wvd'
+New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'Windows' -Sku '11wvd'
 # LOGICAL BREAK POINT HERE WHILE WAITING FOR STEPS TO COMPLETE
 
 # configure the ARM template
