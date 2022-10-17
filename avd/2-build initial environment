@@ -1,4 +1,4 @@
-# Make sure to Connect-AzAccount AND set your context if you are doing a redeploy and skipped 1-prerequisites
+# Make sure to Connect-AzAccount AND set your context if you are doing a redeploy, skipped 1-prerequisites, or have multiple subscriptions
 # Building our variables, base environment.
 
 # Get existing Azure account context
@@ -11,13 +11,15 @@ $subscriptionID = $currentAzContext.Subscription.Id
 $location = "eastus"
 
 # whatever you want to name your destination image resource group and then create it.
-$imageResourceGroup = "RG-AzureImageBuilder"
+$imageResourceGroup = "RG-AIB1EastUS"
 New-AzResourceGroup -Name $imageResourceGroup -Location $location
 
 # Create a managed identity
-$timeInt=$(get-date -UFormat "%s")
-$imageRoleDefName="AIB Contributor"+$timeInt
-$identityName="ImageBuilder"+$timeInt
+# $timeInt=$(get-date -UFormat "%s")
+# $imageRoleDefName="AIB Contributor"+$timeInt
+# $identityName="ImageBuilder"+$timeInt
+$imageRoleDefName="AIB Contributor AIB1EastUS"
+$identityName="ImageBuilderAIB1EastUS"
 New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -Location $location
 # LOGICAL BREAK POINT HERE WHILE WAITING FOR STEPS TO COMPLETE
 $identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id
