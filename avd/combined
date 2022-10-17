@@ -5,7 +5,7 @@ $location = "eastus"
 
 # whatever you want to name your destination image resource group and then create it.
 $imageResourceGroup = "RG-AzureImageBuilder"
-New-AzResourceGroup -Name $imageResourceGroup -Location $location
+# New-AzResourceGroup -Name $imageResourceGroup -Location $location
 
 # whatever you want to name your image template
 $imageTemplateName = "avd10ImageTemplate01"
@@ -31,7 +31,7 @@ $subscriptionID = $currentAzContext.Subscription.Id
 
 # Create a managed identity
 $timeInt=$(get-date -UFormat "%s")
-$imageRoleDefName="Image Builder Contributor"+$timeInt
+$imageRoleDefName="AIB Contributor"+$timeInt
 $identityName="ImageBuilder"+$timeInt
 New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -Location $location
 # LOGICAL BREAK POINT HERE WHILE WAITING FOR STEPS TO COMPLETE
