@@ -1,0 +1,47 @@
+# building our variables, base environment, and compute gallery definition.
+
+# get existing Azure account context
+$currentAzContext = Get-AzContext
+
+# get your current subscription ID
+$subscriptionID = $currentAzContext.Subscription.Id
+
+# the Azure region to deploy to. Region names: Get-AzLocation | Select-Object Location | Sort-Object Location
+$location = "eastus"
+
+# whatever you want to name your destination image resource group and then create it.
+$imageResourceGroup = "RG-AIB1EastUS"
+
+# whatever you want to name your image gallery
+$sigGalleryName = "AIBGallery1EastUS"
+
+# Managed identity
+$identityName="ImageBuilderAIB1EastUS"
+$identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id
+
+# create gallery definition
+New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'Windows' -Sku '10wvd'
+
+
+# configure the ARM template
+# If you want to use a different image type you can look up the current SKUs and alter the armTemplateWVD.json
+# Get-AzVMImageSku -Location $location -PublisherName MicrosoftWindowsDesktop -Offer windows-10
+
+$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/armtemplateAVD.json"
+$templateFilePath = "armTemplateAVD.json"
+
+# Configure the ARM template
+Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
+
+((Get-Content -path $templateFilePath -Raw) -replace '<subscriptionID>',$subscriptionID) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<rgName>',$imageResourceGroup) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<region>',$location) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<runOutputName>',$runOutputName) | Set-Content -Path $templateFilePath
+
+((Get-Content -path $templateFilePath -Raw) -replace '<imageDefName>',$imageDefName) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<sharedImageGalName>',$sigGalleryName) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<region1>',$location) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<imgBuilderId>',$identityNameResourceId) | Set-Content -Path $templateFilePath
+
+# submit the template to Azure Image Builder
+New-AzResourceGroupDeployment -ResourceGroupName $imageResourceGroup -TemplateFile $templateFilePath -api-version "2020-02-14" -imageTemplateName $imageTemplateName -svclocation $location
