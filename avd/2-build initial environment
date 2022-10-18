@@ -40,6 +40,7 @@ New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $ima
 ### NOTE: If you see this error: 'New-AzRoleDefinition: Role definition limit exceeded. No more role definitions can be created.' See this article to resolve:
 # https://docs.microsoft.com/en-us/azure/role-based-access-control/troubleshooting
 
-# create gallery# whatever you want to name your image gallery
+# create gallery
+# whatever you want to name your image gallery
 $sigGalleryName = "AIBGallery1EastUS"
 New-AzGallery -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location
