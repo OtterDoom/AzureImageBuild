@@ -1,3 +1,7 @@
+#DO NOT DO THIS IF YOUR ENVIRONMENT IS ALREADY SET UP. THIS IS FOR FIRST TIME SETUP ONLY!!!!!!
+
+
+
 # make sure to Connect-AzAccount AND set your context if you are doing a redeploy, skipped 1-prerequisites, or have multiple subscriptions
 # building our variables, base environment, and compute gallery.
 
