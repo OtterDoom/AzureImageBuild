@@ -1,35 +1,30 @@
-# Make sure to Connect-AzAccount AND set your context if you are doing a redeploy, skipped 1-prerequisites, or have multiple subscriptions
-# Building our variables, base environment.
+# make sure to Connect-AzAccount AND set your context if you are doing a redeploy, skipped 1-prerequisites, or have multiple subscriptions
+# building our variables, base environment, and compute gallery.
 
-# Get existing Azure account context
+# get existing Azure account context
 $currentAzContext = Get-AzContext
 
-# Get your current subscription ID
+# get your current subscription ID
 $subscriptionID = $currentAzContext.Subscription.Id
 
-# The Azure region to deploy to. Region names: Get-AzLocation | Select-Object Location | Sort-Object Location
+# the Azure region to deploy to. Region names: Get-AzLocation | Select-Object Location | Sort-Object Location
 $location = "eastus"
 
 # whatever you want to name your destination image resource group and then create it.
 $imageResourceGroup = "RG-AIB1EastUS"
 New-AzResourceGroup -Name $imageResourceGroup -Location $location
 
-# Create a managed identity
-# $timeInt=$(get-date -UFormat "%s")
-# $imageRoleDefName="AIB Contributor"+$timeInt
-# $identityName="ImageBuilder"+$timeInt
-$imageRoleDefName="AIB Contributor AIB1EastUS"
+# create a managed identity
 $identityName="ImageBuilderAIB1EastUS"
 New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -Location $location
-# LOGICAL BREAK POINT HERE WHILE WAITING FOR STEPS TO COMPLETE
-$identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id
 $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
 
-# Create and assign custom role to the managed identity that allows it to manipulate images inside only this resource group
+# create and assign custom role to the managed identity that allows it to manipulate images inside only this resource group
+$imageRoleDefName="AIB Contributor AIB1EastUS"
 $aibRoleImageCreationUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/aibRoleImageCreation.json"
 $aibRoleImageCreationPath = "aibRoleImageCreation.json"
 
-# download config
+# download custom role configuration
 Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing
 ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<subscriptionID>',$subscriptionID) | Set-Content -Path $aibRoleImageCreationPath
 ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<rgName>', $imageResourceGroup) | Set-Content -Path $aibRoleImageCreationPath
@@ -37,10 +32,14 @@ Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPa
 
 # create role definition
 New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json
-# LOGICAL BREAK POINT HERE WHILE WAITING FOR STEPS TO COMPLETE
+# Wait here for last step to finish
 
 # grant role definition to image builder service principal
 New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
 
 ### NOTE: If you see this error: 'New-AzRoleDefinition: Role definition limit exceeded. No more role definitions can be created.' See this article to resolve:
 # https://docs.microsoft.com/en-us/azure/role-based-access-control/troubleshooting
+
+# create gallery# whatever you want to name your image gallery
+$sigGalleryName = "AIBGallery1EastUS"
+New-AzGallery -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location
