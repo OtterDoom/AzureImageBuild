@@ -1,0 +1,27 @@
+# building our variables, base environment, and compute gallery definition for our host pool.
+
+# get existing Azure account context
+$currentAzContext = Get-AzContext
+
+# get your current subscription ID
+$subscriptionID = $currentAzContext.Subscription.Id
+
+# the Azure region to deploy to. Region names: Get-AzLocation | Select-Object Location | Sort-Object Location
+$location = "eastus"
+
+# whatever you want to name your destination image resource group and then create it.
+$imageResourceGroup = "RG-AIB1EastUS"
+
+# custom role name
+$imageRoleDefName="AIB Contributor AIB1EastUS"
+
+# whatever you want to name your image gallery
+$sigGalleryName = "AIBGallery1EastUS"
+
+# Managed identity
+$identityName="ImageBuilderAIB1EastUS"
+$identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id
+$identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
+
+# distribution properties object name (runOutput), i.e. this gives you the properties of the managed image on completion
+$runOutputName = "sigOutput"

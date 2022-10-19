@@ -1,32 +1,18 @@
 #DO NOT DO THIS IF YOUR ENVIRONMENT IS ALREADY SET UP. THIS IS FOR FIRST TIME SETUP ONLY!!!!!!
-
-
 # make sure to Connect-AzAccount AND set your context if you are doing a redeploy, skipped 1-prerequisites, or have multiple subscriptions
 # building our variables, base environment, and compute gallery.
 
-# get existing Azure account context
-$currentAzContext = Get-AzContext
-
-# get your current subscription ID
-$subscriptionID = $currentAzContext.Subscription.Id
-
-# the Azure region to deploy to. Region names and format: Get-AzLocation | Select-Object Location | Sort-Object Location
-$location = "eastus"
-
-# whatever you want to name your destination image resource group and then create it.
-$imageResourceGroup = "RG-AIB1EastUS"
-New-AzResourceGroup -Name $imageResourceGroup -Location $location
-
-# create a managed identity to run our automation
-$identityName="ImageBuilderAIB1EastUS"
-New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -Location $location
-$identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
-
-# create and assign custom role to the managed identity that allows it to manipulate images inside only this resource group
-$imageRoleDefName="AIB Contributor AIB1EastUS"
+# custom role variables
 $aibRoleImageCreationUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/aibRoleImageCreation.json"
 $aibRoleImageCreationPath = "aibRoleImageCreation.json"
 
+# create the resource group
+New-AzResourceGroup -Name $imageResourceGroup -Location $location
+
+# create a managed identity to run our automation
+New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -Location $location
+
+# create and assign custom role to the managed identity that allows it to manipulate images inside only this resource group
 # download custom role configuration
 Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing
 ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<subscriptionID>',$subscriptionID) | Set-Content -Path $aibRoleImageCreationPath
@@ -35,7 +21,6 @@ Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPa
 
 # create role definition
 New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json
-# Wait here for last step to finish
 
 # grant role definition to image builder service principal
 New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
@@ -44,6 +29,4 @@ New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $ima
 # https://docs.microsoft.com/en-us/azure/role-based-access-control/troubleshooting
 
 # create gallery
-# whatever you want to name your image gallery
-$sigGalleryName = "AIBGallery1EastUS"
 New-AzGallery -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location
