@@ -1,4 +1,5 @@
-# building our variables, base environment, and compute gallery definition for our host pool.
+# global variables used in the initial build of our enviroment, host pools, and ongoing maintenance
+# be sure to run this before doing any other work or you will get errors
 
 # get existing Azure account context
 $currentAzContext = Get-AzContext
