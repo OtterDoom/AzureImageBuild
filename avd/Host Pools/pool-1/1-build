@@ -1,12 +1,12 @@
 # building our variables, compute gallery definition and the ARM template for our host pool in Azure Image Builder.
 # image definition name. this is Pool specific
-$imageDefName = "21h1-evd"
+$imageDefName = "yellow-21h1-evd"
 
 # whatever you want to name your image template. this is Pool specific
-$imageTemplateName = "Template21h1-evdEastUs"
+$imageTemplateName = "yellow-21h1-evdEastUs"
 
 # create gallery definition for this pool this only needs to be done once
-New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'Windows' -Sku '10wvd'
+New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'yellow' -Sku '21h1-evd'
 
 # configure the ARM template. this is pool specific
 # if you want to use a different image type you can look up the current SKUs and alter the armTemplateWVD.json
