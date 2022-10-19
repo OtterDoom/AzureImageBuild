@@ -1,0 +1,32 @@
+# building our variables, compute gallery definition and the ARM template for our host pool in Azure Image Builder.
+# image definition name. this is Pool specific
+$imageDefName = "21h1-evd"
+
+# whatever you want to name your image template. this is Pool specific
+$imageTemplateName = "Template21h1-evdEastUs"
+
+# create gallery definition for this pool this only needs to be done once
+New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'Windows' -Sku '10wvd'
+
+# configure the ARM template. this is pool specific
+# if you want to use a different image type you can look up the current SKUs and alter the armTemplateWVD.json
+# Get-AzVMImageSku -Location $location -PublisherName MicrosoftWindowsDesktop -Offer windows-10
+
+$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/pool-0-template/armtemplateAVD.json"
+$templateFilePath = "armTemplateAVD.json"
+
+# Configure the ARM template
+Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
+
+((Get-Content -path $templateFilePath -Raw) -replace '<subscriptionID>',$subscriptionID) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<rgName>',$imageResourceGroup) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<region>',$location) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<runOutputName>',$runOutputName) | Set-Content -Path $templateFilePath
+
+((Get-Content -path $templateFilePath -Raw) -replace '<imageDefName>',$imageDefName) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<sharedImageGalName>',$sigGalleryName) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<region1>',$location) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<imgBuilderId>',$identityNameResourceId) | Set-Content -Path $templateFilePath
+
+# submit the template to Azure Image Builder
+New-AzResourceGroupDeployment -ResourceGroupName $imageResourceGroup -TemplateFile $templateFilePath -api-version "2020-02-14" -imageTemplateName $imageTemplateName -svclocation $location
