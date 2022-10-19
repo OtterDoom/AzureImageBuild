@@ -8,11 +8,11 @@ $imageTemplateName = "Template21h1-evdEastUs"
 # create gallery definition for this pool this only needs to be done once
 New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'Windows' -Sku '10wvd'
 
-# configure the ARM template. this is pool specific
+# configure the ARM template. this is pool specific. Make sure to update the templateurl variable for host pool
 # if you want to use a different image type you can look up the current SKUs and alter the armTemplateWVD.json
 # Get-AzVMImageSku -Location $location -PublisherName MicrosoftWindowsDesktop -Offer windows-10
 
-$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/pool-0-template/armtemplateAVD.json"
+$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/Host%20Pools/pool-0-template/armtemplateAVD.json"
 $templateFilePath = "armTemplateAVD.json"
 
 # Configure the ARM template
