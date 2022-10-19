@@ -1,5 +1,5 @@
-# global variables used in the initial build of our enviroment, host pools, and ongoing maintenance
-# be sure to run this before doing any other work or you will get errors
+# global variables used in the initial setup of new host pools and maintenance
+# After the intial setup, be sure to run this before doing any other work or you may get errors for missing variables
 
 # get existing Azure account context
 $currentAzContext = Get-AzContext
