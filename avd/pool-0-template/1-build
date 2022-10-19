@@ -1,4 +1,4 @@
-# building our variables, base environment, and compute gallery definition.
+# building our variables, base environment, and compute gallery definition for our host pool.
 
 # get existing Azure account context
 $currentAzContext = Get-AzContext
@@ -22,12 +22,14 @@ $identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $image
 # create gallery definition
 New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'Windows' -Sku '10wvd'
 
+# distribution properties object name (runOutput), i.e. this gives you the properties of the managed image on completion
+$runOutputName = "sigOutput"
 
 # configure the ARM template
 # If you want to use a different image type you can look up the current SKUs and alter the armTemplateWVD.json
 # Get-AzVMImageSku -Location $location -PublisherName MicrosoftWindowsDesktop -Offer windows-10
 
-$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/armtemplateAVD.json"
+$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/pool-0-template/armtemplateAVD.json"
 $templateFilePath = "armTemplateAVD.json"
 
 # Configure the ARM template
