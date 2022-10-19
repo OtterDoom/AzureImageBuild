@@ -10,14 +10,14 @@ $currentAzContext = Get-AzContext
 # get your current subscription ID
 $subscriptionID = $currentAzContext.Subscription.Id
 
-# the Azure region to deploy to. Region names: Get-AzLocation | Select-Object Location | Sort-Object Location
+# the Azure region to deploy to. Region names and format: Get-AzLocation | Select-Object Location | Sort-Object Location
 $location = "eastus"
 
 # whatever you want to name your destination image resource group and then create it.
 $imageResourceGroup = "RG-AIB1EastUS"
 New-AzResourceGroup -Name $imageResourceGroup -Location $location
 
-# create a managed identity
+# create a managed identity to run our automation
 $identityName="ImageBuilderAIB1EastUS"
 New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -Location $location
 $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
