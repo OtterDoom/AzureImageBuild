@@ -1,0 +1,6 @@
+
+# image definition name. This is Pool specific
+$imageDefName = "21h1-evd"
+
+# whatever you want to name your image template. This is Pool specific
+$imageTemplateName = "Template21h1-evdEastUs"
