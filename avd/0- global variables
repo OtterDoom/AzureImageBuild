@@ -13,16 +13,16 @@ $location = "eastus"
 # whatever you want to name your destination image resource group and then create it.
 $imageResourceGroup = "RG-AIB1EastUS"
 
+# Managed identity
+$identityName="ImageBuilderAIB1EastUS"
+$identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id
+$identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
+
 # custom role name
 $imageRoleDefName="AIB Contributor AIB1EastUS"
 
 # whatever you want to name your image gallery
 $sigGalleryName = "AIBGallery1EastUS"
-
-# Managed identity
-$identityName="ImageBuilderAIB1EastUS"
-$identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id
-$identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
 
 # distribution properties object name (runOutput), i.e. this gives you the properties of the managed image on completion
 $runOutputName = "sigOutput"
