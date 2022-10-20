@@ -5,7 +5,7 @@ $imageDefName = "yellow-21h1-evd"
 # whatever you want to name your image template. this is Pool specific
 $imageTemplateName = "yellow-21h1-evdEastUs"
 
-# create gallery definition for this pool this only needs to be done once
+# create gallery definition for this pool this normally only needs to be done once
 New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'yellow' -Sku '21h1-evd'
 
 # configure the ARM template. this is pool specific
