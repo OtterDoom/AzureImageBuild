@@ -29,7 +29,7 @@ Remove-AzGalleryImageDefinition -ResourceGroupName $imageResourceGroup -GalleryN
 
 # /////////configure the ARM template and create an AIB Image Template. this is pool specific ////////////////////
 # Configure the ARM template
-$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/Host%20Pools/pool-1/armtemplateAVD.json"
+$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/armtemplateAVD.json"
 $templateFilePath = "armTemplateAVD.json"
 
 Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
