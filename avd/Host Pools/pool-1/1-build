@@ -7,6 +7,7 @@ $imageTemplateName = "yellow-21h1-evdEastUs"
 
 # whatever you want your vm size for this pool to be.
 # Get-AzVMSize -location $location
+$vmsize = "Standard_D2_v5"
 
 
 # create gallery definition for this pool this normally only needs to be done once
@@ -31,6 +32,7 @@ Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
 ((Get-Content -path $templateFilePath -Raw) -replace '<sharedImageGalName>',$sigGalleryName) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<region1>',$location) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<imgBuilderId>',$identityNameResourceId) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<vmSize>',$vmsize) | Set-Content -Path $templateFilePath
 
 # submit the template to Azure Image Builder
 New-AzResourceGroupDeployment -ResourceGroupName $imageResourceGroup -TemplateFile $templateFilePath -api-version "2020-02-14" -imageTemplateName $imageTemplateName -svclocation $location
