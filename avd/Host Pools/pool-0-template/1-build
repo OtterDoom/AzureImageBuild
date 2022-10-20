@@ -1,18 +1,31 @@
-# building our variables, compute gallery definition and the ARM template for our host pool in Azure Image Builder.
+# building our variables, compute gallery definition and the ARM template for our host pool in Azure Image Builder
+# Be sure to load the global variables as well if you are coming back to make changes
 # image definition name. this is Pool specific
-$imageDefName = "21h1-evd"
+$imageDefName = "yellow-21h1-evd"
 
 # whatever you want to name your image template. this is Pool specific
-$imageTemplateName = "Template21h1-evdEastUs"
+$imageTemplateName = "yellow-21h1-evdEastUs"
 
-# create gallery definition for this pool this only needs to be done once
-New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'Windows' -Sku '10wvd'
+# whatever you want your vm size for this pool to be. 
+# you can check what's available in your region and the correct name using: Get-AzVMSize -location $location
+$vmsize = "Standard_D2_v5"
 
-# configure the ARM template. this is pool specific. Make sure to update the templateurl variable for host pool
+
+# create gallery definition for this pool. this normally only needs to be done once for the initial build for a new pool.
+# New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'yellow' -Sku '21h1-evd'
+
+# remove the current image template to either update or decommssion the image builder for this pool
+# Delete the resource group template first, this will remove the staging resource group (IT_) used by AIB
+# Remove-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imagetemplatename
+
+# remove the image definition if you doing a full decommision of this pool
+# Remove-AzGalleryImageDefinition -ResourceGroupName $imageResourceGroup -GalleryName $sigGalleryName -GalleryImageDefinitionName $imageDefName
+
+# configure the ARM template. this is pool specific
 # if you want to use a different image type you can look up the current SKUs and alter the armTemplateWVD.json
 # Get-AzVMImageSku -Location $location -PublisherName MicrosoftWindowsDesktop -Offer windows-10
 
-$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/Host%20Pools/pool-0-template/armtemplateAVD.json"
+$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/Host%20Pools/pool-1/armtemplateAVD.json"
 $templateFilePath = "armTemplateAVD.json"
 
 # Configure the ARM template
@@ -27,6 +40,26 @@ Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
 ((Get-Content -path $templateFilePath -Raw) -replace '<sharedImageGalName>',$sigGalleryName) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<region1>',$location) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<imgBuilderId>',$identityNameResourceId) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<vmSize>',$vmsize) | Set-Content -Path $templateFilePath
 
 # submit the template to Azure Image Builder
 New-AzResourceGroupDeployment -ResourceGroupName $imageResourceGroup -TemplateFile $templateFilePath -api-version "2020-02-14" -imageTemplateName $imageTemplateName -svclocation $location
+
+# Optional - if you have any errors running the above, run:
+$getStatus=$(Get-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imageTemplateName)
+$getStatus.ProvisioningErrorCode 
+$getStatus.ProvisioningErrorMessage
+
+# build the image
+Start-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imageTemplateName -NoWait
+
+# to check the status of build process
+$getStatus=$(Get-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imageTemplateName)
+
+# this shows all the properties
+$getStatus | Format-List -Property *
+
+# these show the status the build
+$getStatus.LastRunStatusRunState 
+$getStatus.LastRunStatusMessage
+$getStatus.LastRunStatusRunSubState
