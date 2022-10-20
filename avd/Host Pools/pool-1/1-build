@@ -1,4 +1,4 @@
-# ///////////////////building our variables, compute gallery definition, and the ARM template for our host pool in Azure Image Builder/////////////////
+# ///////building our variables, compute gallery definition, and the ARM template for our host pool in Azure Image Builder//////
 # Be sure to load from the global variables as well if you are coming back to make changes
 
 # image definition name. this is Pool specific
@@ -10,33 +10,28 @@ $imageTemplateName = "yellow-21h1-evdEastUs"
 # whatever you want your vm size for this pool to be.
 # you can check what's available in your region and the correct name using: Get-AzVMSize -location $location
 $vmsize = "Standard_D2_v4"
-# ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+# /////////////This section contains situational commands that may need to be run before proceeding///////////////
 <#
-This section contains situational commands
-
-create gallery definition for this pool. this normally only needs to be done once for the initial build of a new AIB for a new pool.
+create gallery definition for this pool. this normally only needs to be done once for the initial build of an image for a new pool.
 New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'yellow' -Sku '21h1-evd'
 
-remove the current image template to either update or decommssion the image builder for this pool
-Delete the resource group template first, this will remove the staging resource group (IT_) used by AIB
+remove the current image template to update or decommission the image builder for this pool. Delete the template first, this will remove the staging resource group (IT_) used by AIB
 Remove-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imagetemplatename
 
-remove the image definition if you doing a FULL decommision of this pool
+remove the image definition if you doing a FULL decommission of this pool
 Remove-AzGalleryImageDefinition -ResourceGroupName $imageResourceGroup -GalleryName $sigGalleryName -GalleryImageDefinitionName $imageDefName
 #>
+# /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-# //////////////////////////////// configure the ARM template. this is pool specific //////////////////////////////
-# configure the ARM template. this is pool specific
-# if you want to use a different image type you can look up the current SKUs and alter the armTemplateWVD.json
-# Get-AzVMImageSku -Location $location -PublisherName MicrosoftWindowsDesktop -Offer windows-10
-
+# /////////configure the ARM template and create an AIB Image Template. this is pool specific ////////////////////
+# Configure the ARM template
 $templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/Host%20Pools/pool-1/armtemplateAVD.json"
 $templateFilePath = "armTemplateAVD.json"
 
-# Configure the ARM template
 Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
 
 ((Get-Content -path $templateFilePath -Raw) -replace '<subscriptionID>',$subscriptionID) | Set-Content -Path $templateFilePath
@@ -56,10 +51,10 @@ New-AzResourceGroupDeployment -ResourceGroupName $imageResourceGroup -TemplateFi
 $getStatus=$(Get-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imageTemplateName)
 $getStatus.ProvisioningErrorCode 
 $getStatus.ProvisioningErrorMessage
-# ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-# ////////////////////////////////////////build the image////////////////////////////////////////////////////////
+# ////////////////////////////////////////build the image/////////////////////////////////////////////////////////
 Start-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imageTemplateName -NoWait
 
 # to check the status of build process
@@ -72,4 +67,4 @@ $getStatus.LastRunStatusRunSubState
 
 # this shows all the properties
 $getStatus | Format-List -Property *
-# ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////////////////////////////////////////////////////

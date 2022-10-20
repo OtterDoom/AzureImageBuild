@@ -41,7 +41,7 @@
 
             "vmProfile": 
                     {
-                    "vmSize": "Standard_D2_v2",
+                    "vmSize": "<vmSize>",
                     "osDiskSizeGB": 127
                     },
         
@@ -106,7 +106,7 @@
                     "runOutputName": "<runOutputName>",
                     "artifactTags": {
                         "source": "wvd10",
-                        "baseosimg": "windows10"
+                        "baseosimg": "21h1-evd"
                     },
                     "replicationRegions": [
                       "<region1>"
