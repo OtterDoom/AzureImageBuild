@@ -32,11 +32,13 @@ $aibRoleImageCreationPath = "aibRoleImageCreation.json"
 
 # create the resource group
 New-AzResourceGroup -Name $imageResourceGroup -Location $location
+# pause a moment for the Resource Group to complete creation
 
 # create a managed identity to run our automation
 New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -Location $location
 $identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id
 $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
+# pause a moment for the Managed Identity to complete creation
 
 # create and assign custom role to the managed identity that allows it to manipulate images inside only this resource group
 # download custom role configuration
@@ -47,6 +49,7 @@ Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPa
 
 # create custom role definition
 New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json
+# pause a moment for the role definition to complete creation
 
 # grant custom role definition to the managed identity
 New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
