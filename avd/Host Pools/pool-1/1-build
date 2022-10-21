@@ -1,7 +1,7 @@
 # ///////building our variables, compute gallery definition, and the ARM template for our host pool in Azure Image Builder//////
 # Be sure to load from the global variables as well if you are coming back to make changes
 
-# image definition name. this is Pool specific
+# whatever you want to name your image definition. this is Pool specific
 $imageDefName = "yellow-21h1-evd"
 
 # whatever you want to name your image template. this is Pool specific
@@ -27,9 +27,9 @@ Remove-AzGalleryImageDefinition -ResourceGroupName $imageResourceGroup -GalleryN
 # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-# /////////configure the ARM template and create an AIB Image Template. this is pool specific ////////////////////
-# Configure the ARM template
-$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/armtemplateAVD.json"
+# /////////configure the ARM template and create an AIB Image Template. this template is pool specific ////////////////////
+# Configure the ARM template. Change the URL path for this pool's json
+$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/Host%20Pools/pool-1/armtemplateAVD.json"
 $templateFilePath = "armTemplateAVD.json"
 
 Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
