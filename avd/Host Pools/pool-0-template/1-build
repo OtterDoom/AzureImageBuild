@@ -6,24 +6,18 @@ $imageDefName = "yellow-21h1-evd"
 
 # whatever you want to name your image template. this is Pool specific
 $imageTemplateName = "yellow-21h1-evdEastUs"
-
-# whatever you want your vm size for this pool to be.
-# you can check what's available in your region and the correct name using: Get-AzVMSize -location $location
-$vmsize = "Standard_D2_v4"
 # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 # /////////////This section contains situational commands that may need to be run before proceeding///////////////
-<#
-create gallery definition for this pool. this normally only needs to be done once for the initial build of an image for a new pool.
-New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'yellow' -Sku '21h1-evd'
+# create gallery definition for this pool. this normally only needs to be done once for the initial build of an image for a new pool.
+# New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'yellow' -Sku '21h1-evd'
 
-remove the current image template to update or decommission the image builder for this pool. Delete the template first, this will remove the staging resource group (IT_) used by AIB
-Remove-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imagetemplatename
+# remove the current image template to update or decommission the image builder for this pool. Delete this template first. It will remove the staging resource group (IT_) used by AIB
+# Remove-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imagetemplatename
 
-remove the image definition if you doing a FULL decommission of this pool
-Remove-AzGalleryImageDefinition -ResourceGroupName $imageResourceGroup -GalleryName $sigGalleryName -GalleryImageDefinitionName $imageDefName
-#>
+# remove the image definition if you doing a FULL decommission of this pool
+# Remove-AzGalleryImageDefinition -ResourceGroupName $imageResourceGroup -GalleryName $sigGalleryName -GalleryImageDefinitionName $imageDefName
 # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
