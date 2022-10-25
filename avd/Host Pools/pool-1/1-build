@@ -6,10 +6,6 @@ $imageDefName = "yellow-21h1-evd"
 
 # whatever you want to name your image template. this is Pool specific
 $imageTemplateName = "yellow-21h1-evdEastUs"
-
-# whatever you want your vm size for this pool to be.
-# you can check what's available in your region and the correct name using: Get-AzVMSize -location $location
-$vmsize = "Standard_D2_v4"
 # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
