@@ -63,30 +63,10 @@
                         "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/FSLogixSetup.ps1"
                     },
                     {
-                        "type": "PowerShell",
-                        "name": "OptimizeOS",
-                        "runElevated": true,
-                        "runAsSystem": true,
-                        "scriptUri": "https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/solutions/14_Building_Images_WVD/1_Optimize_OS_for_WVD.ps1"
-                    },
-                    {
-                        "type": "WindowsRestart",
-                        "restartCheckCommand": "write-host 'restarting post Optimizations'",
-                        "restartTimeout": "5m"
-                    },
-                    {
-                        "type": "PowerShell",
-                        "name": "Install Teams",
-                        "runElevated": true,
-                        "runAsSystem": true,
-                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/installTeams.ps1"
-                    },
-                    {
                         "type": "WindowsRestart",
                         "restartCheckCommand": "write-host 'restarting post Teams Install'",
                         "restartTimeout": "5m"
-                    },
-                        
+                    },                        
                     {
                         "type": "WindowsUpdate",
                         "searchCriteria": "IsInstalled=0",
