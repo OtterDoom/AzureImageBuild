@@ -23,7 +23,7 @@ $imageTemplateName = "yellow-21h1-evdEastUs"
 
 # /////////configure the ARM template and create an AIB Image Template. this template is pool specific ////////////////////
 # Configure the ARM template. Change the URL path for this pool's json
-$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/Host%20Pools/pool-1/armtemplateAVD.json"
+$templateUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/HostPools/pool-1/armtemplateAVD.json"
 $templateFilePath = "armTemplateAVD.json"
 
 Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
