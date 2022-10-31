@@ -53,7 +53,15 @@
                     "version": "latest"
             },
             "customize": [
-
+                    {
+                        "type": "WindowsUpdate",
+                        "searchCriteria": "IsInstalled=0",
+                        "filters": [
+                            "exclude:$_.Title -like '*Preview*'",
+                            "include:$true"
+                                    ],
+                        "updateLimit": 40
+                    }
             ],
             "distribute": 
             [
