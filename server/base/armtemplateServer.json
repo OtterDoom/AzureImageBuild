@@ -70,8 +70,8 @@
                     "galleryImageId": "/subscriptions/<subscriptionID>/resourceGroups/<rgName>/providers/Microsoft.Compute/galleries/<sharedImageGalName>/images/<imageDefName>",
                     "runOutputName": "<runOutputName>",
                     "artifactTags": {
-                        "source": "wvd10",
-                        "baseosimg": "21h1-evd"
+                        "source": "server",
+                        "baseosimg": "2022-datacenter-azure-edition"
                     },
                     "replicationRegions": [
                       "<region1>"
