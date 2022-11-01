@@ -11,7 +11,7 @@ $imageTemplateName = "server-2022-datacenter-azure-edition-eastus"
 
 # /////////////This section contains situational commands that may need to be run before proceeding///////////////
 # create gallery definition for this pool. this normally only needs to be done once for the initial build of an image for a new pool.
-# New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'yellow' -Sku '21h1-evd'
+# New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCo' -Offer 'server' -Sku '2022-datacenter-azure-edition'
 
 # remove the current image template to update or decommission the image builder for this pool. Delete this template first. It will remove the staging resource group (IT_) used by AIB
 # Remove-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imagetemplatename
