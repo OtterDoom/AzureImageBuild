@@ -27,7 +27,7 @@ $sigGalleryName = "AIBGallery1EastUS"
 $runOutputName = "sigOutput"
 
 # custom role variables
-$aibRoleImageCreationUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/avd/aibRoleImageCreation.json"
+$aibRoleImageCreationUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/aibRoleImageCreation.json"
 $aibRoleImageCreationPath = "aibRoleImageCreation.json"
 
 # create the resource group
