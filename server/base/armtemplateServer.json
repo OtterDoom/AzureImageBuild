@@ -49,7 +49,7 @@
                 "type": "PlatformImage",
                     "publisher": "MicrosoftWindowsServer",
                     "offer": "windowsserver",
-                    "sku": "2022-datacenter-azure-edition",
+                    "sku": "2019-Datacenter",
                     "version": "latest"
             },
             "customize": [
@@ -71,7 +71,7 @@
                     "runOutputName": "<runOutputName>",
                     "artifactTags": {
                         "source": "server",
-                        "baseosimg": "2022-datacenter-azure-edition"
+                        "baseosimg": "2019-Datacenter"
                     },
                     "replicationRegions": [
                       "<region1>"

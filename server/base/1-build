@@ -2,10 +2,10 @@
 # Be sure to load from the global variables as well if you are coming back to make changes
 
 # whatever you want to name your image definition. this is Pool specific
-$imageDefName = "server-2022-base"
+$imageDefName = "2019-Datacenter"
 
 # whatever you want to name your image template. this is Pool specific
-$imageTemplateName = "server-2022-datacenter-azure-edition-eastus"
+$imageTemplateName = "2019-Datacenter-eastus"
 # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
