@@ -9,26 +9,36 @@ $currentAzContext = Get-AzContext
 $subscriptionID = $currentAzContext.Subscription.Id
 
 # the Azure region to deploy to. Region names: Get-AzLocation | Select-Object Location | Sort-Object Location
-$location = "eastus"
+$location = "eastus2"
 
 # name of your destination resource group
-$imageResourceGroup = "RG-AIB1EastUS"
+$imageResourceGroup = "RG-AIB1-EastUS2"
 
 # Managed identity
-$identityName="ImageBuilderAIB1EastUS"
+$identityName="ImageBuilderAIB1EastUS2"
 
 # custom role name
-$imageRoleDefName="AIB Contributor AIB1EastUS"
+$imageRoleDefName="AIB Contributor AIB1EastUS2"
 
 # whatever you want to name your image gallery
-$sigGalleryName = "AIBGallery1EastUS"
+$sigGalleryName = "AIBGallery1EastUS2"
 
 # distribution properties object name (runOutput), i.e. this gives you the properties of the managed image on completion
 $runOutputName = "sigOutput"
 
 # custom role variables
-$aibRoleImageCreationUrl="https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/aibRoleImageCreation.json"
+$aibRoleImageCreationUrl = "win-sysadmin\AzureImageBuild\aibRoleImageCreation.json"
 $aibRoleImageCreationPath = "aibRoleImageCreation.json"
+
+#Vnet Information. This is where Image Builder will build and capture. This assumes you already have an existing VNET,subnet, nsg to use.
+# VNET 
+$vnetName="Azure-CORPE2"
+# subnet name
+$subnetName="Utility"
+# VNET resource group name
+$vnetRgName="Network_Infrastructure_Corp"
+# NSG name on the subnet
+$nsgname="nsg-corp-utility"
 
 # create the resource group
 New-AzResourceGroup -Name $imageResourceGroup -Location $location
@@ -40,11 +50,13 @@ $identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $image
 $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
 # pause a moment for the Managed Identity to complete creation
 
-# create and assign custom role to the managed identity that allows it to manipulate images inside only this resource group
+# create and assign custom role to the managed identity that allows it to manipulate images and VMs inside only specific Resource Groups
 # download custom role configuration
-Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing
+#Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing
+Get-Content $aibRoleImageCreationUrl | Out-File $aibRoleImageCreationPath
 ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<subscriptionID>',$subscriptionID) | Set-Content -Path $aibRoleImageCreationPath
 ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<rgName>', $imageResourceGroup) | Set-Content -Path $aibRoleImageCreationPath
+((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<vnetRgName>', $vnetRgName) | Set-Content -Path $aibRoleImageCreationPath
 ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace 'Azure Image Builder Service Image Creation Role', $imageRoleDefName) | Set-Content -Path $aibRoleImageCreationPath
 
 # create custom role definition
@@ -59,3 +71,11 @@ New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $ima
 
 # create gallery
 New-AzGallery -GalleryName $sigGalleryName -ResourceGroupName $imageResourceGroup -Location $location
+
+# Allow Azure Load Balancer to communicate with the proxy VM in a network security group.
+Get-AzNetworkSecurityGroup -Name $nsgName -ResourceGroupName $vnetRgName  | Add-AzNetworkSecurityRuleConfig -Name AzureImageBuilderAccess -Description "Allow Image Builder Private Link Access to Proxy VM" -Access Allow -Protocol Tcp -Direction Inbound -Priority 400 -SourceAddressPrefix AzureLoadBalancer -SourcePortRange * -DestinationAddressPrefix VirtualNetwork -DestinationPortRange 60000-60001 | Set-AzNetworkSecurityGroup
+
+# Disable private link service policy on the subnet
+$virtualNetwork= Get-AzVirtualNetwork -Name $vnetName -ResourceGroupName $vnetRgName
+($virtualNetwork | Select -ExpandProperty subnets | Where-Object  {$_.Name -eq $subnetName} ).privateLinkServiceNetworkPolicies = "Disabled"
+$virtualNetwork | Set-AzVirtualNetwork
