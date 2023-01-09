@@ -42,51 +42,44 @@
             "vmProfile": 
                     {
                     "vmSize": "Standard_D2_v4",
-                    "osDiskSizeGB": 127
+                    "osDiskSizeGB": 127,
+                    "vnetConfig":{"subnetId": "/subscriptions/<subscriptionID>/resourceGroups/<vnetRgName>/providers/Microsoft.Network/virtualNetworks/<vnetName>/subnets/<subnetName>"}                
                     },
         
             "source": {
                 "type": "PlatformImage",
                     "publisher": "MicrosoftWindowsDesktop",
                     "offer": "windows-10",
-                    "sku": "21h1-evd",
+                    "sku": "win10-22h2-avd",
                     "version": "latest"
             },
             "customize": [
-
-        
                     {
                         "type": "PowerShell",
-                        "name": "installFsLogix",
+                        "name": "installChrome",
                         "runElevated": true,
                         "runAsSystem": true,
-                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/FSLogixSetup.ps1"
+                        "scriptUri": "https://devops-gitlab.svce1.greensky.net/windows_public/win-sysadmin/-/raw/main/AzureImageBuild/applications/ChromeEntX64.ps1"
                     },
                     {
                         "type": "PowerShell",
-                        "name": "OptimizeOS",
+                        "name": "installvisualc",
                         "runElevated": true,
                         "runAsSystem": true,
-                        "scriptUri": "https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/solutions/14_Building_Images_WVD/1_Optimize_OS_for_WVD.ps1"
+                        "scriptUri": "https://devops-gitlab.svce1.greensky.net/windows_public/win-sysadmin/-/raw/main/AzureImageBuild/applications/microsoftvisualcx64.ps1"
+                    },
+                    {
+                        "type": "PowerShell",
+                        "name": "installTeams",
+                        "runElevated": true,
+                        "runAsSystem": true,
+                        "scriptUri": "https://devops-gitlab.svce1.greensky.net/windows_public/win-sysadmin/-/raw/main/AzureImageBuild/applications/Teams.ps1"
                     },
                     {
                         "type": "WindowsRestart",
-                        "restartCheckCommand": "write-host 'restarting post Optimizations'",
+                        "restartCheckCommand": "write-host 'restarting post Applications'",
                         "restartTimeout": "5m"
                     },
-                    {
-                        "type": "PowerShell",
-                        "name": "Install Teams",
-                        "runElevated": true,
-                        "runAsSystem": true,
-                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/installTeams.ps1"
-                    },
-                    {
-                        "type": "WindowsRestart",
-                        "restartCheckCommand": "write-host 'restarting post Teams Install'",
-                        "restartTimeout": "5m"
-                    },
-                        
                     {
                         "type": "WindowsUpdate",
                         "searchCriteria": "IsInstalled=0",
@@ -95,8 +88,12 @@
                             "include:$true"
                                     ],
                         "updateLimit": 40
+                    },
+                    {
+                        "type": "WindowsRestart",
+                        "restartCheckCommand": "write-host 'restarting post Windows Update'",
+                        "restartTimeout": "5m"
                     }
-
             ],
             "distribute": 
             [
@@ -106,7 +103,7 @@
                     "runOutputName": "<runOutputName>",
                     "artifactTags": {
                         "source": "wvd10",
-                        "baseosimg": "21h1-evd"
+                        "baseosimg": "win10-22h2-avd"
                     },
                     "replicationRegions": [
                       "<region1>"

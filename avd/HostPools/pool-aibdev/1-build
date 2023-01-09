@@ -8,11 +8,11 @@ $imageDefName = "aibdev-22h2-avd"
 $imageTemplateName = "aibdev-22h2-avd-E2"
 
 # VNET name
-$vnetName="Azure-CORPE2"
+$vnetName="vnet-hub1-eastus"
 # subnet name
 $subnetName="Utility"
 # VNET resource group name
-$vnetRgName="Network_Infrastructure_Corp"
+$vnetRgName="RG-Hub1EastUS"
 
 # NOTE! The virtual network must always be in the same region as the VM Image Builder service region.
 # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ $vnetRgName="Network_Infrastructure_Corp"
 
 # /////////configure the ARM template and create an AIB Image Template. this template is pool specific ////////////////////
 # Configure the ARM template. Change the URL path for this pool's json
-$templateUrl="win-sysadmin\AzureImageBuild\avd\HostPools\pool-aibdev\armtemplateAVD.json"
+$templateUrl="AzureImageBuild\avd\HostPools\pool-aibdev\armtemplateAVD.json"
 $templateFilePath = "armTemplateAVD.json"
 
 # Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing

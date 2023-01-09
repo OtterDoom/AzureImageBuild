@@ -9,25 +9,25 @@ $currentAzContext = Get-AzContext
 $subscriptionID = $currentAzContext.Subscription.Id
 
 # the Azure region to deploy to. Region names: Get-AzLocation | Select-Object Location | Sort-Object Location
-$location = "eastus2"
+$location = "eastus"
 
 # name of your destination resource group
-$imageResourceGroup = "RG-AIB1-EastUS2"
+$imageResourceGroup = "RG-AIB1-EastUS"
 
 # Managed identity
-$identityName="ImageBuilderAIB1EastUS2"
+$identityName="ImageBuilderAIB1EastUS"
 
 # custom role name
-$imageRoleDefName="AIB Contributor AIB1EastUS2"
+$imageRoleDefName="AIB Contributor AIB1EastUS"
 
 # whatever you want to name your image gallery
-$sigGalleryName = "AIBGallery1EastUS2"
+$sigGalleryName = "AIBGallery1EastUS"
 
 # distribution properties object name (runOutput), i.e. this gives you the properties of the managed image on completion
 $runOutputName = "sigOutput"
 
 # custom role variables
-$aibRoleImageCreationUrl = "win-sysadmin\AzureImageBuild\aibRoleImageCreation.json"
+$aibRoleImageCreationUrl = "AzureImageBuild\aibRoleImageCreation.json"
 $aibRoleImageCreationPath = "aibRoleImageCreation.json"
 
 #Vnet Information. This is where Image Builder will build and capture. This assumes you already have an existing VNET,subnet, nsg to use.
@@ -38,7 +38,7 @@ $subnetName="Utility"
 # VNET resource group name
 $vnetRgName="RG-Hub1EastUS"
 # NSG name on the subnet
-$nsgname="nsg-corp-utility"
+$nsgname="nsg-hub1-utility"
 
 # create the resource group
 New-AzResourceGroup -Name $imageResourceGroup -Location $location
@@ -77,5 +77,5 @@ Get-AzNetworkSecurityGroup -Name $nsgName -ResourceGroupName $vnetRgName  | Add-
 
 # Disable private link service policy on the subnet
 $virtualNetwork= Get-AzVirtualNetwork -Name $vnetName -ResourceGroupName $vnetRgName
-($virtualNetwork | Select -ExpandProperty subnets | Where-Object  {$_.Name -eq $subnetName} ).privateLinkServiceNetworkPolicies = "Disabled"
+($virtualNetwork | Select-Object -ExpandProperty subnets | Where-Object  {$_.Name -eq $subnetName} ).privateLinkServiceNetworkPolicies = "Disabled"
 $virtualNetwork | Set-AzVirtualNetwork
