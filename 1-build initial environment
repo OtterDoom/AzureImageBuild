@@ -32,11 +32,11 @@ $aibRoleImageCreationPath = "aibRoleImageCreation.json"
 
 #Vnet Information. This is where Image Builder will build and capture. This assumes you already have an existing VNET,subnet, nsg to use.
 # VNET 
-$vnetName="Azure-CORPE2"
+$vnetName="vnet-hub1-eastus"
 # subnet name
 $subnetName="Utility"
 # VNET resource group name
-$vnetRgName="Network_Infrastructure_Corp"
+$vnetRgName="RG-Hub1EastUS"
 # NSG name on the subnet
 $nsgname="nsg-corp-utility"
 
