@@ -59,21 +59,21 @@
                         "name": "installChrome",
                         "runElevated": true,
                         "runAsSystem": true,
-                        "scriptUri": "https://devops-gitlab.svce1.greensky.net/windows_public/win-sysadmin/-/raw/main/AzureImageBuild/applications/ChromeEntX64.ps1"
+                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/ChromeEntx64.ps1"
                     },
                     {
                         "type": "PowerShell",
                         "name": "installvisualc",
                         "runElevated": true,
                         "runAsSystem": true,
-                        "scriptUri": "https://devops-gitlab.svce1.greensky.net/windows_public/win-sysadmin/-/raw/main/AzureImageBuild/applications/microsoftvisualcx64.ps1"
+                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/microsoftvisualcx64.ps1"
                     },
                     {
                         "type": "PowerShell",
                         "name": "installTeams",
                         "runElevated": true,
                         "runAsSystem": true,
-                        "scriptUri": "https://devops-gitlab.svce1.greensky.net/windows_public/win-sysadmin/-/raw/main/AzureImageBuild/applications/Teams.ps1"
+                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/teams.ps1"
                     },
                     {
                         "type": "WindowsRestart",

@@ -11,7 +11,7 @@ $subscriptionID = $currentAzContext.Subscription.Id
 $location = "eastus"
 
 # name of your destination resource group
-$imageResourceGroup = "RG-AIB1-EastUS"
+$imageResourceGroup = "RG-AIB1EastUS"
 
 # Managed identity
 $identityName="ImageBuilderAIB1EastUS"
