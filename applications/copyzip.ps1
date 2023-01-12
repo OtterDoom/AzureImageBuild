@@ -1,0 +1,1 @@
+Copy-Item -Path \\gsazfilescorp.file.core.windows.net\azureimagebuilderfiles\applications\lookatme.zip -Destination c:\temp

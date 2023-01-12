@@ -50,7 +50,7 @@ $identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $image
 $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
 # pause a moment for the Managed Identity to complete creation
 
-# create and assign custom role to the managed identity that allows it to manipulate images and VMs inside only specific Resource Groups
+# create and assign custom role availability to specific Resource Groups that gives permissions for image builder tasks
 # download custom role configuration
 #Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing
 Get-Content $aibRoleImageCreationUrl | Out-File $aibRoleImageCreationPath
@@ -63,8 +63,9 @@ Get-Content $aibRoleImageCreationUrl | Out-File $aibRoleImageCreationPath
 New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json
 # pause a moment for the role definition to complete creation
 
-# grant custom role definition to the managed identity
+# assign custom role definition to the managed identity
 New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
+New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$vnetRgName"
 
 ### NOTE: If you see this error: 'New-AzRoleDefinition: Role definition limit exceeded. No more role definitions can be created.' See this article to resolve:
 # https://docs.microsoft.com/en-us/azure/role-based-access-control/troubleshooting
