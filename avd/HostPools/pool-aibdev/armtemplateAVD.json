@@ -49,8 +49,8 @@
             "source": {
                 "type": "PlatformImage",
                     "publisher": "MicrosoftWindowsDesktop",
-                    "offer": "windows-10",
-                    "sku": "win10-22h2-avd",
+                    "offer": "office-365",
+                    "sku": "win10-22h2-avd-m365",
                     "version": "latest"
             },
             "customize": [
@@ -59,21 +59,21 @@
                         "name": "installChrome",
                         "runElevated": true,
                         "runAsSystem": true,
-                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/ChromeEntx64.ps1"
+                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/installchromeentx64.ps1"
                     },
                     {
                         "type": "PowerShell",
-                        "name": "installvisualc",
+                        "name": "azcopy",
                         "runElevated": true,
                         "runAsSystem": true,
-                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/microsoftvisualcx64.ps1"
+                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/downloadazcopy.ps1"
                     },
                     {
                         "type": "PowerShell",
-                        "name": "installTeams",
+                        "name": "agents",
                         "runElevated": true,
                         "runAsSystem": true,
-                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/teams.ps1"
+                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/downloadagents.ps1"
                     },
                     {
                         "type": "WindowsRestart",
@@ -102,8 +102,8 @@
                     "galleryImageId": "/subscriptions/<subscriptionID>/resourceGroups/<rgName>/providers/Microsoft.Compute/galleries/<sharedImageGalName>/images/<imageDefName>",
                     "runOutputName": "<runOutputName>",
                     "artifactTags": {
-                        "source": "wvd10",
-                        "baseosimg": "win10-22h2-avd"
+                        "source": "avd10",
+                        "baseosimg": "win10-22h2-avd-m365"
                     },
                     "replicationRegions": [
                       "<region1>"
