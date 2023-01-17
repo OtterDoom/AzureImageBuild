@@ -13,11 +13,15 @@
       "Microsoft.Compute/images/delete",
 
       "Microsoft.Network/virtualNetworks/read",
-      "Microsoft.Network/virtualNetworks/subnets/join/action"
+      "Microsoft.Network/virtualNetworks/subnets/join/action",
+      "Microsoft.Storage/storageAccounts/blobServices/containers/read",
+      "Microsoft.Storage/storageAccounts/blobServices/generateUserDelegationKey/action"
   ],
-  "NotActions": [
-
+  "NotActions": [],
+  "dataActions": [
+      "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read"
   ],
+  "notDataActions": [],    
   "AssignableScopes": [
     "/subscriptions/<subscriptionID>/resourceGroups/<rgName>",
     "/subscriptions/<subscriptionID>/resourceGroups/<vnetRgName>"

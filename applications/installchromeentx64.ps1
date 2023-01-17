@@ -9,6 +9,7 @@ Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customizat
 Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customization: Install URI $appURI"
 Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customization: Install package name is $apppkg"
 New-Item -Path $drive -Name $appName -ItemType Directory -ErrorAction SilentlyContinue
+#Download command
 (New-Object Net.WebClient).DownloadFile("$appURI", "$outputPath")
 Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) Download of $apppkg complete"
 Write-Host "$(Get-Date) AIB Customization: Starting Install of $appname"
