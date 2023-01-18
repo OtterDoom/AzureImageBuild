@@ -10,8 +10,10 @@ Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customizat
 Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customization: Download package name is $apppkg"
 New-Item -Path $drive -Name $appName -ItemType Directory -ErrorAction SilentlyContinue
 #login with azcopy using managed identity
+Write-Host "$(Get-Date) AIB Customization: Login with AZCopy"
 C:\temp\apps\azcopy\azcopy_windows_amd64_10.16.2\azcopy.exe login --identity --identity-client-id "d8453f9c-e06b-4346-86ca-16b4a04b1f9f"
 #Download command
+Write-Host "$(Get-Date) AIB Customization: Download from Azure Blob"
 C:\temp\apps\azcopy\azcopy_windows_amd64_10.16.2\azcopy.exe copy $appURI $outputPath
 Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) Download of $apppkg complete"
 Write-Host "$(Get-Date) AIB Customization: Starting Download of $appname"
