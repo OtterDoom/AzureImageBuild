@@ -1,5 +1,5 @@
 $appName = "agents"
-$appURI = "https://saaibeastus2files.blob.core.windows.net/applications/agents.zip"
+$appURI = "https://saaibappseus.blob.core.windows.net/applications/agents.zip"
 $apppkg = "agents.zip"
 $drive = "C:\temp"
 $LocalPath = $drive + '\' + $appName
@@ -12,7 +12,6 @@ New-Item -Path $drive -Name $appName -ItemType Directory -ErrorAction SilentlyCo
 #login with azcopy using managed identity
 Write-Host "$(Get-Date) AIB Customization: Login with AZCopy"
 Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customization: Login with AZCopy"
-C:\temp\apps\azcopy\azcopy_windows_amd64_10.16.2\azcopy.exe login --identity --identity-client-id "d8453f9c-e06b-4346-86ca-16b4a04b1f9f"
 
 #Download command
 Write-Host "$(Get-Date) AIB Customization: Starting Download of $appname"
