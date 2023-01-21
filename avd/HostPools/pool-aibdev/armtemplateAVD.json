@@ -76,6 +76,13 @@
                         "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/downloadagents.ps1"
                     },
                     {
+                        "type": "PowerShell",
+                        "name": "agents",
+                        "runElevated": true,
+                        "runAsSystem": true,
+                        "scriptUri": "https://saaibappseus.blob.core.windows.net/applications/helloworld.ps1"
+                    },
+                    {
                         "type": "WindowsRestart",
                         "restartCheckCommand": "write-host 'restarting post Applications'",
                         "restartTimeout": "5m"
