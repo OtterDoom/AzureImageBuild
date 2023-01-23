@@ -1,5 +1,5 @@
 $appName = "agents"
-$appURI = "https://saazureimagebuildereu2.blob.core.windows.net/applications/agents.zip"
+$appURI = "https://saaibappseus.blob.core.windows.net/applications/agents.zip"
 $apppkg = "agents.zip"
 $drive = "C:\temp"
 $LocalPath = $drive + '\' + $appName
@@ -9,9 +9,6 @@ Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customizat
 Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customization: Download URI $appURI"
 Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customization: Download package name is $apppkg"
 New-Item -Path $drive -Name $appName -ItemType Directory -ErrorAction SilentlyContinue
-#login with azcopy using managed identity
-Write-Host "$(Get-Date) AIB Customization: Login with AZCopy"
-Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customization: Login with AZCopy"
 
 #Download command
 Write-Host "$(Get-Date) AIB Customization: Starting Download of $appname"
