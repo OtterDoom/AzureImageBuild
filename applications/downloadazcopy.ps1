@@ -1,6 +1,6 @@
 $appName = "azcopy"
 $appURI = "https://aka.ms/downloadazcopy-v10-windows"
-$apppkg = "azcopy_windows_amd64_10.16.2.zip"
+$apppkg = "azcopy_windows.zip"
 $drive = "C:\temp\apps"
 $LocalPath = $drive + '\' + $appName
 $outputPath = $LocalPath + '\' + $apppkg
@@ -17,5 +17,6 @@ Write-Host "$(Get-Date) Download of $apppkg complete"
 Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) Download of $apppkg complete"
 # Set your download switches and arguments
 Expand-Archive $outputPath -DestinationPath $LocalPath
+Get-ChildItem $LocalPath -Attributes D | Rename-Item -NewName "azcopy_windows"
 Write-host "$(Get-Date) AIB Customization: Finished unzip of $appname"
-Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customization: Finished unzip of $appname"
+Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customization: Finished unzip of $appname" 

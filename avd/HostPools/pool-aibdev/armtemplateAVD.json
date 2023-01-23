@@ -30,8 +30,7 @@
                 "type": "UserAssigned",
                         "userAssignedIdentities": {
                         "<imgBuilderId>": {}
-                            
-                    }
+                        }
                     },
         
         "properties": {
@@ -41,7 +40,8 @@
                     {
                     "vmSize": "Standard_D2_v4",
                     "osDiskSizeGB": 127,
-                    "vnetConfig":{"subnetId": "/subscriptions/<subscriptionID>/resourceGroups/<vnetRgName>/providers/Microsoft.Network/virtualNetworks/<vnetName>/subnets/<subnetName>"}                
+                    "vnetConfig":{"subnetId": "/subscriptions/<subscriptionID>/resourceGroups/<vnetRgName>/providers/Microsoft.Network/virtualNetworks/<vnetName>/subnets/<subnetName>"},
+                    "userAssignedIdentities": ["<imgBuilderId>"]
                     },
         
             "source": {

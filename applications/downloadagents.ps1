@@ -13,7 +13,7 @@ New-Item -Path $drive -Name $appName -ItemType Directory -ErrorAction SilentlyCo
 #Download command
 Write-Host "$(Get-Date) AIB Customization: Starting Download of $appname"
 Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customization: Starting download of $appname"
-C:\temp\apps\azcopy\azcopy_windows_amd64_10.16.2\azcopy.exe copy $appURI $outputPath
+C:\temp\apps\azcopy\azcopy_windows\azcopy.exe copy $appURI $outputPath
 Write-Host "$(Get-Date) AIB Customization: Completed Download of $appname"
 Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customization: Completed Download of $appname"
 
