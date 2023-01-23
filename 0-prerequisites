@@ -1,8 +1,8 @@
 # You can skip ahead to '1-build initial environment' if you've done this already
 
 # Make sure you have these PowerShell modules
-Install-Module -Name Az
-Install-Module -Name Az.ImageBuilder
+Install-Module -Name Az -Scope CurrentUser
+Install-Module -Name Az.ImageBuilder -Scope CurrentUser
 
 # Connect to your Azure account
 Connect-AzAccount
