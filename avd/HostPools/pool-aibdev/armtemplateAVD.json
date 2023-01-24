@@ -40,8 +40,7 @@
                     {
                     "vmSize": "Standard_D2_v4",
                     "osDiskSizeGB": 127,
-                    "vnetConfig":{"subnetId": "/subscriptions/<subscriptionID>/resourceGroups/<vnetRgName>/providers/Microsoft.Network/virtualNetworks/<vnetName>/subnets/<subnetName>"},
-                    "userAssignedIdentities": ["<imgBuilderId>"]
+                    "vnetConfig":{"subnetId": "/subscriptions/<subscriptionID>/resourceGroups/<vnetRgName>/providers/Microsoft.Network/virtualNetworks/<vnetName>/subnets/<subnetName>"}
                     },
         
             "source": {
