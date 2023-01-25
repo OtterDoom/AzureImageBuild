@@ -12,8 +12,8 @@ New-Item -Path $drive -Name $appName -ItemType Directory -ErrorAction SilentlyCo
 
 #login as AZCopy using managed identity
 $env:AZCOPY_AUTO_LOGIN_TYPE="MSI"
-$env:AZCOPY_MSI_OBJECT_ID="2959ba51-134a-469d-8966-de1f513963e2"
-$env:AZCOPY_TENANT_ID="eff244d8-2c89-49e9-bb2a-c98646dc7330"
+# $env:AZCOPY_MSI_OBJECT_ID="2959ba51-134a-469d-8966-de1f513963e2"
+# $env:AZCOPY_TENANT_ID="eff244d8-2c89-49e9-bb2a-c98646dc7330"
 # C:\temp\apps\azcopy\azcopy_windows\azcopy.exe login --identity
 # C:\temp\apps\azcopy\azcopy_windows\azcopy.exe login --identity --identity-object-id "2959ba51-134a-469d-8966-de1f513963e2"
 
