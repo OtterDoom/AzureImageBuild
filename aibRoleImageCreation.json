@@ -15,7 +15,9 @@
       "Microsoft.Network/virtualNetworks/read",
       "Microsoft.Network/virtualNetworks/subnets/join/action",
       "Microsoft.Storage/storageAccounts/blobServices/containers/read",
-      "Microsoft.Storage/storageAccounts/blobServices/generateUserDelegationKey/action"
+      "Microsoft.Storage/storageAccounts/blobServices/generateUserDelegationKey/action",
+
+      "Microsoft.ManagedIdentity/userAssignedIdentities/assign/action"
   ],
   "NotActions": [],
   "dataActions": [

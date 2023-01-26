@@ -1,5 +1,5 @@
 #DO NOT DO THIS IF YOUR ENVIRONMENT IS ALREADY SET UP. THIS IS FOR FIRST TIME SETUP ONLY!!!!!!
-# make sure to Connect-AzAccount AND set your context if you are doing a redeploy, skipped 1-prerequisites, or have multiple subscriptions
+# make sure to Connect-AzAccount AND set your context if you are doing a redeploy, skipped 0-prerequisites, or have multiple subscriptions
 # building our variables, base environment, and compute gallery.
 
 # get existing Azure account context
@@ -11,13 +11,13 @@ $subscriptionID = $currentAzContext.Subscription.Id
 # the Azure region to deploy to. Region names: Get-AzLocation | Select-Object Location | Sort-Object Location
 $location = "eastus"
 
-# name of your destination resource group
+# name of your destination resource group where the Image Builder Service and supporting objects will be deployed to
 $imageResourceGroup = "RG-AIB1-EastUS"
 
-# Managed identity
+# Managed identity that will perform all the automation tasks to build and deploy the image to the gallery
 $identityName="ImageBuilderAIB1EastUS"
 
-# custom role name
+# custom role name that will be assigned to the Managed Identity giving it permissions to perfom its tasks
 $imageRoleDefName="AIB Contributor AIB1EastUS"
 
 # whatever you want to name your image gallery
@@ -26,7 +26,7 @@ $sigGalleryName = "AIBGallery1EastUS"
 # distribution properties object name (runOutput), i.e. this gives you the properties of the managed image on completion
 $runOutputName = "sigOutput"
 
-# custom role variables
+# custom role variables. This json contains the permissions to be give to the custom role that will be assigned to the Managed Identity
 $aibRoleImageCreationUrl = "AzureImageBuild\aibRoleImageCreation.json"
 $aibRoleImageCreationPath = "aibRoleImageCreation.json"
 
