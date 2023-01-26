@@ -40,8 +40,10 @@ $vnetRgName="RG-Hub1EastUS"
 # NSG name on the subnet
 $nsgname="nsg-hub1-utility"
 
+# Storage Account to be created that will contain non-public files, applications, and scripts
 # name of storage account
 $storageacctname="saaibeastus"
+$containername="applications"
 
 # create the resource group
 New-AzResourceGroup -Name $imageResourceGroup -Location $location
@@ -84,5 +86,8 @@ $virtualNetwork= Get-AzVirtualNetwork -Name $vnetName -ResourceGroupName $vnetRg
 ($virtualNetwork | Select-Object -ExpandProperty subnets | Where-Object  {$_.Name -eq $subnetName} ).privateLinkServiceNetworkPolicies = "Disabled"
 $virtualNetwork | Set-AzVirtualNetwork
 
-# Create a storage account that will contain non-public files, applications, and scripts.
+# Create a storage account and container that will contain non-public files, applications, and scripts
 New-AzStorageAccount -ResourceGroupName $imageResourceGroup -Name $storageacctname -SkuName Standard_LRS -Location $location
+# Create a context object using Azure AD credentials
+$ctx = New-AzStorageContext -StorageAccountName $storageacctname -UseConnectedAccount
+New-AzStorageContainer -Name $containername -Context $ctx

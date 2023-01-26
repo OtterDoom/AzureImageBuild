@@ -78,7 +78,7 @@
                         "name": "agents",
                         "runElevated": true,
                         "runAsSystem": true,
-                        "scriptUri": "https://saazureimagebuilder.blob.core.windows.net/applications/helloworld.ps1"
+                        "scriptUri": "https://saaibeastus.blob.core.windows.net/applications/helloworld.ps1"
                     },
                     {
                         "type": "WindowsRestart",
