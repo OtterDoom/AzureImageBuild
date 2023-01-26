@@ -40,6 +40,9 @@ $vnetRgName="RG-Hub1EastUS"
 # NSG name on the subnet
 $nsgname="nsg-hub1-utility"
 
+# name of storage account
+$storageacctname="saaibeastus"
+
 # create the resource group
 New-AzResourceGroup -Name $imageResourceGroup -Location $location
 # pause a moment for the Resource Group to complete creation
@@ -80,3 +83,6 @@ Get-AzNetworkSecurityGroup -Name $nsgName -ResourceGroupName $vnetRgName | Add-A
 $virtualNetwork= Get-AzVirtualNetwork -Name $vnetName -ResourceGroupName $vnetRgName
 ($virtualNetwork | Select-Object -ExpandProperty subnets | Where-Object  {$_.Name -eq $subnetName} ).privateLinkServiceNetworkPolicies = "Disabled"
 $virtualNetwork | Set-AzVirtualNetwork
+
+# Create a storage account that will contain non-public files, applications, and scripts.
+New-AzStorageAccount -ResourceGroupName $imageResourceGroup -Name $storageacctname -SkuName Standard_LRS -Location $location

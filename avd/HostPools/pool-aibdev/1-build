@@ -7,6 +7,7 @@ $imageDefName = "aibdev-22h2-avd"
 # whatever you want to name your image template. this is Pool specific
 $imageTemplateName = "aibdev-22h2-avd-E2"
 
+# VNET and properties that will be used for the build of the image
 # VNET name
 $vnetName="vnet-hub1-eastus"
 # subnet name
