@@ -1,5 +1,5 @@
 $appName = "agents"
-$appURI = "https://saaibeastus.blob.core.windows.net/applications/agents.zip"
+$appURI = "https://saaibeastus2.blob.core.windows.net/applications/agents.zip"
 $apppkg = "agents.zip"
 $drive = "C:\temp"
 $LocalPath = $drive + '\' + $appName
