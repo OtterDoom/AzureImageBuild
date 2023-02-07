@@ -54,6 +54,20 @@
             "customize": [
                     {
                         "type": "PowerShell",
+                        "name": "downloadazcopy",
+                        "runElevated": true,
+                        "runAsSystem": true,
+                        "scriptUri": "https://saaibeastus2.blob.core.windows.net/applications/downloadazcopy.ps1"
+                    },
+                    {
+                        "type": "PowerShell",
+                        "name": "downloadagents",
+                        "runElevated": true,
+                        "runAsSystem": true,
+                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/downloadagents.ps1"
+                    },
+                    {
+                        "type": "PowerShell",
                         "name": "installChrome",
                         "runElevated": true,
                         "runAsSystem": true,
@@ -61,24 +75,24 @@
                     },
                     {
                         "type": "PowerShell",
-                        "name": "azcopy",
+                        "name": "installPWSH",
                         "runElevated": true,
                         "runAsSystem": true,
-                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/downloadazcopy.ps1"
+                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/installpwsh.ps1"
                     },
                     {
                         "type": "PowerShell",
-                        "name": "agents",
+                        "name": "installRSAT",
                         "runElevated": true,
                         "runAsSystem": true,
-                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/downloadagents.ps1"
+                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/installrsat.ps1"
                     },
                     {
                         "type": "PowerShell",
-                        "name": "agents",
+                        "name": "installVSCode",
                         "runElevated": true,
                         "runAsSystem": true,
-                        "scriptUri": "https://saaibeastus.blob.core.windows.net/applications/helloworld.ps1"
+                        "scriptUri": "https://raw.githubusercontent.com/OtterDoom/AzureImageBuild/main/applications/installvscode.ps1"
                     },
                     {
                         "type": "WindowsRestart",
