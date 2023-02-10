@@ -12,7 +12,7 @@ New-Item -Path $drive -Name $appName -ItemType Directory -ErrorAction SilentlyCo
 Write-Host "$(Get-Date) AIB Customization: Starting Download of $appname"
 Add-Content -LiteralPath C:\New-SessionHostImage.log "$(Get-Date) AIB Customization: Starting download of $appname"
 #Download command
-#set auto_login environment variable
+#set auto_login environment variable so azcopy will use the Managed Service Identity assigned to the Azure Image Builder VM and will be able to connect to our Azure Storage account
 $env:AZCOPY_AUTO_LOGIN_TYPE="MSI"
 C:\temp\apps\azcopy\azcopy_windows\azcopy.exe copy $appURI $outputPath
 Write-Host "$(Get-Date) AIB Customization: Completed Download of $appname"
